@@ -21,7 +21,7 @@ if (!window.sessionStorage.chatterabi) {
 
 const { id, color } = JSON.parse(window.sessionStorage.getItem("chatterabi"));
 
-const socket = new WebSocket(`ws://${window.location.host}/`);
+const socket = new WebSocket(`wss://${window.location.host}/`);
 
 socket.addEventListener("open", (event) => {
   let $form = $(".msger-inputarea");
