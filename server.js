@@ -2,7 +2,6 @@ import express, { json } from "express";
 import postgress from "postgres";
 import expressWs from "express-ws";
 import { v4 as uuidv4 } from "uuid";
-//import cookieParser from "cookie-parser";
 
 const server = express();
 expressWs(server);
@@ -16,7 +15,6 @@ const sql = postgress({
 
 const clients = new Map();
 
-// server.use(cookieParser());
 server.use(express.json());
 server.use(express.static("Public"));
 
@@ -26,21 +24,6 @@ server.use(function (req, res, next) {
   return next();
 });
 
-// server.use(function (req, res, next) {
-//   const id = uuidv4();
-//   var cookie = req.cookies.chatterabi;
-//   if (cookie === undefined) {
-//     res.cookie("chatterabi", id, {
-//       maxAge: 900000,
-//       httpOnly: true,
-//     });
-//     console.log("cookie created");
-//   } else {
-//     console.log("cookie exists", cookie);
-//   }
-//   next();
-// });
-
 server.get("/", (req, res, next) => {
   res.set("Content-Type", "text/plain");
   res.status(200);
@@ -48,16 +31,13 @@ server.get("/", (req, res, next) => {
 });
 
 server.ws("/", (ws, req) => {
-  const id = uuidv4();
-  const color = Math.floor(Math.random() * 360);
-  const metadata = { id, color };
-
-  clients.set(ws, metadata);
+  clients.set(ws);
+  console.log("connection");
 
   ws.on("message", function (msg) {
-    console.log({ metadata, msg });
+    console.log({ msg });
     [...clients.keys()].forEach((client) => {
-      client.send(JSON.stringify({ metadata, msg }));
+      client.send(msg);
     });
   });
   console.log("socket", req.testing);
