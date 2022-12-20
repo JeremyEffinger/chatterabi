@@ -24,9 +24,21 @@ server.use(function (req, res, next) {
   return next();
 });
 
-server.get("/history", (req, res, next) => {
+server.get("/api/history", (req, res, next) => {
   sql`SELECT * FROM messages;`.then((history) => {
     res.json(history);
+  });
+});
+
+server.get("/api/history/user/:id", (req, res, next) => {
+  let id = req.params.id;
+  sql`SELECT * FROM messages WHERE sender_id=${id};`.then((message) => {
+    if (message.length === 0) {
+      res.set("Content-Type", "text/plain");
+      res.status(404);
+      res.send("Not Found");
+    }
+    res.json(message);
   });
 });
 
