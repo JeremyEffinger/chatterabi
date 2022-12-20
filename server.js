@@ -14,21 +14,13 @@ const sql = postgress({
   password: process.env.CHATTERABI_DB_PASSWORD,
 });
 
-function formatDate(date) {
-  const h = "0" + date.getHours();
-  const m = "0" + date.getMinutes();
-
-  return `${h.slice(-2)}:${m.slice(-2)}`;
-}
-
 const clients = new Map();
 
 server.use(express.json());
 server.use(express.static("Public"));
 
 server.use(function (req, res, next) {
-  console.log("middleware");
-  req.testing = "testing";
+  req.testing = "setup";
   return next();
 });
 
@@ -40,14 +32,13 @@ server.get("/history", (req, res, next) => {
 
 server.ws("/", (ws, req) => {
   clients.set(ws);
-  console.log("connection");
+  console.log("connection", req.testing);
 
   ws.on("message", function (msg) {
-    const { id, color, text } = JSON.parse(msg);
-    console.log(`${id} sent "${text}" at time ${formatDate(new Date())}`);
+    const { id, text } = JSON.parse(msg);
     const now = new Date();
     sql`INSERT INTO messages (message, timesent, sender_id) VALUES (${text}, ${now}, ${id}) RETURNING *`.then(
-      (result) => console.log(result)
+      (result) => console.log(result[0])
     );
     [...clients.keys()].forEach((client) => {
       client.send(msg);
