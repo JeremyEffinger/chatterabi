@@ -35,7 +35,7 @@ socket.addEventListener("open", (event) => {
       return false;
     }
     socket.send(JSON.stringify({ id, color, text }));
-    $input.text = "";
+    $input.val("");
     return false;
   });
 
