@@ -8,11 +8,8 @@ const server = express();
 expressWs(server);
 const port = 3000;
 
-const sql = postgress({
-  database: process.env.CHATTERABI_DB,
-  username: process.env.CHATTERABI_DB_USERNAME,
-  password: process.env.CHATTERABI_DB_PASSWORD,
-});
+const db_url = process.env.CHATTERABI_DB_URL;
+const sql = postgress(db_url);
 
 const clients = new Map();
 
