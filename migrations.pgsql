@@ -1,6 +1,4 @@
-
 DROP TABLE IF EXISTS messages;
-DROP TABLE IF EXISTS users;
 
 CREATE TABLE messages
 (

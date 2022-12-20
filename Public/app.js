@@ -45,7 +45,7 @@ socket.addEventListener("open", (event) => {
     let $messageList = $(".msger-chat");
     let side = response.id === id ? "left" : "right";
     $messageList.append(`<div class="msg ${side}-msg">
-    <div class="msg-img" style="background-image: url("place holder img")"></div>
+    <div class="msg-img" style="background-image: url(${"./img/anonymous.png"})"></div>
 
     <div class="msg-bubble">
       <div class="msg-info">

@@ -32,10 +32,10 @@ server.use(function (req, res, next) {
   return next();
 });
 
-server.get("/", (req, res, next) => {
-  res.set("Content-Type", "text/plain");
-  res.status(200);
-  res.send("Welcome");
+server.get("/history", (req, res, next) => {
+  sql`SELECT * FROM messages;`.then((history) => {
+    res.json(history);
+  });
 });
 
 server.ws("/", (ws, req) => {
