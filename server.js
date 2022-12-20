@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 dotenv.config();
 import express, { json } from "express";
+import path from "path";
 import postgress from "postgres";
 import expressWs from "express-ws";
 
@@ -10,7 +11,7 @@ const port = 3000;
 
 const db_url = process.env.CHATTERABI_DB_URL;
 const sql = postgress(db_url);
-
+const __dirname = path.resolve();
 const clients = new Map();
 
 server.use(express.json());
@@ -37,6 +38,10 @@ server.get("/api/history/user/:id", (req, res, next) => {
     }
     res.json(message);
   });
+});
+
+server.get("/history", (req, res, next) => {
+  res.sendFile(`${__dirname}/Public/history.html`);
 });
 
 server.ws("/", (ws, req) => {
