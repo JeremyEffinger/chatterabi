@@ -57,5 +57,6 @@ socket.addEventListener("open", (event) => {
       <div class="msg-text">${response.text}</div>
     </div>
   </div>`);
+    $messageList.animate({ scrollTop: $messageList.prop("scrollHeight") }, 500);
   };
 });
