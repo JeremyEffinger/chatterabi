@@ -1,7 +1,8 @@
+import * as dotenv from "dotenv";
+dotenv.config();
 import express, { json } from "express";
 import postgress from "postgres";
 import expressWs from "express-ws";
-import { v4 as uuidv4 } from "uuid";
 
 const server = express();
 expressWs(server);
@@ -12,6 +13,13 @@ const sql = postgress({
   username: process.env.CHATTERABI_DB_USERNAME,
   password: process.env.CHATTERABI_DB_PASSWORD,
 });
+
+function formatDate(date) {
+  const h = "0" + date.getHours();
+  const m = "0" + date.getMinutes();
+
+  return `${h.slice(-2)}:${m.slice(-2)}`;
+}
 
 const clients = new Map();
 
@@ -35,7 +43,12 @@ server.ws("/", (ws, req) => {
   console.log("connection");
 
   ws.on("message", function (msg) {
-    console.log({ msg });
+    const { id, color, text } = JSON.parse(msg);
+    console.log(`${id} sent "${text}" at time ${formatDate(new Date())}`);
+    const now = new Date();
+    sql`INSERT INTO messages (message, timesent, sender_id) VALUES (${text}, ${now}, ${id}) RETURNING *`.then(
+      (result) => console.log(result)
+    );
     [...clients.keys()].forEach((client) => {
       client.send(msg);
     });
