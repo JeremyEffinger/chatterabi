@@ -13,7 +13,7 @@ Chatterabi is an anonymized chat platform that allows users to communicate with 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/[username]/chatterabi.git
+git clone https://github.com/JeremyEffinger/chatterabi.git
 ```
 2. Install teh dependences 
 
